@@ -1,3 +1,4 @@
+import 'package:fks/Screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fks/Screens/login/login.dart';
 import 'package:fks/components/background.dart';
@@ -38,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     documentReference.set(users).whenComplete((){
       print("$name created");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
     });
 
   }

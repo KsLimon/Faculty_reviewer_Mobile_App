@@ -35,11 +35,11 @@ class Background extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 50,
-            right: 30,
+            top: 20,
+            right: 10,
             child: Image.asset(
-              "assets/images/main.png",
-              width: size.width * 0.35
+              "assets/images/NSU_logo.png",
+              width: size.width * 0.45
             ),
           ),
           Positioned(

@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:fks/Screens/home.dart';
 import 'package:fks/Screens/login/login.dart';
 import 'package:fks/main.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -30,4 +34,5 @@ Future<User?> signInWithGoogle() async {
 
 void signOutGoogle() async {
   await googleSignIn.signOut();
+  await FirebaseAuth.instance.signOut();
 }
