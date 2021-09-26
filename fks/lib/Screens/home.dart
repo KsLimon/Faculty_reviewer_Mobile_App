@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fks/components/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fks/Screens/login/login.dart';
-import 'package:fks/components/background.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:fks/components/appback.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}):super(key: key);
@@ -16,7 +13,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void click() {
     signOutGoogle();
-    // Phoenix.rebirth(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
@@ -25,7 +21,59 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Background(
+      appBar: AppBar(
+        title: Text('Home'),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.home),
+                    title: Text("Home"),
+                  ),
+                ),
+              ),
+              const PopupMenuItem(
+                child: ListTile(
+                  leading: Icon(Icons.anchor),
+                  title: Text('Item 2'),
+                ),
+              ),
+              const PopupMenuItem(
+                child: ListTile(
+                  leading: Icon(Icons.article),
+                  title: Text('Item 3'),
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: this.click,
+                  child: ListTile(
+                    leading: Icon(Icons.logout),
+                  title: Text(
+                    "SIGN OUT",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2661FA),
+                        fontSize: 20
+                    ),
+                  ),
+                ),
+                ),
+              ),
+            ],
+          ),
+        ],
+        backgroundColor: Colors.indigoAccent,
+      ),
+      body: Appback(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

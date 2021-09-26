@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "name": name,
       "id": id,
       "mail": mail,
-      "pass": pass
+      "Dep": pass
   };
 
     documentReference.set(users).whenComplete((){
@@ -105,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               margin: EdgeInsets.symmetric(horizontal: 40),
               child: TextField(
                 decoration: InputDecoration(
-                  labelText: "Password"
+                  labelText: "Department"
                 ),
                 obscureText: true,
                 onChanged: (String pass){
