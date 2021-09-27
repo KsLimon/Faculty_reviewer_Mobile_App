@@ -14,7 +14,7 @@ void main() async {
   if (user != null) {
     runApp(
       Phoenix(
-        child: nextmyapp(),
+        child: nextmyapp( user: user),
       ),
     );
   }
@@ -46,6 +46,11 @@ class MyApp extends StatelessWidget {
 
 
 class nextmyapp extends StatelessWidget {
+  const nextmyapp({Key? key, required User user})
+      : _user = user,
+        super(key: key);
+
+  final User _user;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -57,7 +62,7 @@ class nextmyapp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(),
+      home: HomeScreen( user: _user),
     );
   }
 }

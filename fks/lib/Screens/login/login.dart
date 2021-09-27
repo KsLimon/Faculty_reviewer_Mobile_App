@@ -16,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 }
 class _LoginScreenState extends State<LoginScreen> {
   late User user;
-  static late String eml;
 
   @override
   void initState() {
@@ -27,13 +26,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void click() {
     signInWithGoogle().then((user) => {
       this.user = user!,
-      _LoginScreenState.eml = user.email!,
       if(!user.email!.endsWith('@northsouth.edu')){
         Alert(message: 'Use NSU mail account for SignUp').show(),
         Phoenix.rebirth(context)
       },
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => RegisterScreen()))
+          MaterialPageRoute(builder: (context) => RegisterScreen(user: user,)))
     });
   }
 
@@ -99,8 +97,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
-
-class getml{
-  static String mm = _LoginScreenState.eml;
 }

@@ -1,16 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fks/Screens/home.dart';
 import 'package:flutter/material.dart';
-import 'package:fks/Screens/login/login.dart';
 import 'package:fks/components/background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key, required User user}): _user = user, super(key: key);
+  final User _user;
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 class _RegisterScreenState extends State<RegisterScreen> {
+  late User _user;
   late String name, id, mail, pass;
+
+  @override
+  void initState() {
+    _user = widget._user;
+
+    super.initState();
+  }
 
   getname(String name){
     this.name=name;
@@ -19,8 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     this.id=id;
   }
   getmail(){
-    this.mail= getml.mm ;
-    print(mail);
+    this.mail= _user.email!;
   }
   getpass(String pass){
     this.pass=pass;
@@ -39,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     documentReference.set(users).whenComplete((){
       print("$name created");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user)));
     });
 
   }
