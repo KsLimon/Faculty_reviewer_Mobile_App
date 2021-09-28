@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fks/Screens/login/login.dart';
 import 'package:fks/components/appback.dart';
 import 'package:fks/Screens/profile.dart';
+import 'package:fks/Screens/Rating.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required User user}): _user = user, super(key: key);
@@ -13,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 class _HomeScreenState extends State<HomeScreen> {
   late User _user;
+  final List<String> myname = <String>['Kamrus', 'Samad', 'Limon', 'Sabiha', 'Sultana', 'Tonni'];
+
 
   @override
   void click() {
@@ -130,38 +135,93 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-            Container(
-              height: 136,
-              margin: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.indigoAccent[100],
-                  boxShadow: [BoxShadow(
-                  offset: Offset(0, 15),
-              blurRadius: 27,
-              color: Colors.black26, // Black color with 12% opacity
-            )],
-              ),
+      Expanded(
+        child: Stack(
+          children: <Widget>[
+            StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('Faculty').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView(
+                    children: snapshot.data!.docs.map((document) {
+                // return ListView.builder(
+                  // itemCount: myname.length,
+                  // itemBuilder: (context, int index) =>
+                      return Container(
+                        height: 136,
+                        margin: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.indigoAccent[100],
+                          boxShadow: [BoxShadow(
+                            offset: Offset(0, 15),
+                            blurRadius: 27,
+                            color: Colors
+                                .black26, // Black color with 12% opacity
+                          )
+                          ],
+                        ),
+                        child: GestureDetector(
+                          onTap: ()=> {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => RateScreen(user: _user, name: document["name"],)))
+                          },
+                        child: Container(
+                          height: 136,
+                          margin: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                          ),
 
-              child: Container(
-                height: 136,
-                margin: const EdgeInsets.only(right: 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
-                ),
-                child: ListTile(
-                  leading: Image.asset("assets/images/mam.png"),
-                  title: Text(
-                      "Faculty Info",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
+                          child: new Column(
+                              children: [
+                          new ListTile(
+                            leading: Image.asset("assets/images/mam.png"),
+                            title: Text(
+                              "${document["name"]}\n${document["initial"]}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                                new Container(
+                                  height: 30,
+                                  width: 50,
+                                  margin: const EdgeInsets.only(left: 240, top: 40, right: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12),
+                                    ),
+                                    color: Colors.cyan[300],
+                                  ),
+                                  child: Text(
+                                    "${document["score"]}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                          ),
+                        ),
                       ),
-                    ),
-                ),
-              ),
+                      );
+              }).toList(),
+                );
+              },
             ),
+        ],
+      ),
+    ),
 
             SizedBox(height: size.height * 0.03),
 

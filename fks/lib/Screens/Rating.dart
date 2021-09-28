@@ -7,17 +7,20 @@ import 'package:fks/components/appback.dart';
 import 'package:fks/Screens/profile.dart';
 
 class RateScreen extends StatefulWidget {
-  const RateScreen({Key? key, required User user}): _user = user, super(key: key);
+  const RateScreen({Key? key, required User user, required String name}): _user = user, _name=name, super(key: key);
   final User _user;
+  final String _name;
   @override
   _RateScreenState createState() => _RateScreenState();
 }
 class _RateScreenState extends State<RateScreen> {
   late User _user;
+  late String name;
 
   @override
   void initState() {
     _user = widget._user;
+    name = widget._name;
 
     super.initState();
   }
@@ -34,7 +37,7 @@ class _RateScreenState extends State<RateScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Evaluate Your Faculty'),
+        title: Text("Faculty's Score"),
         actions: [
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
@@ -104,6 +107,17 @@ class _RateScreenState extends State<RateScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Container(
+              child: Text(
+                "${name}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                  color: Colors.indigoAccent,
+                ),
+              ),
+            ),
           ],
         ),
       ),
