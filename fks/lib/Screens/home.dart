@@ -7,6 +7,9 @@ import 'package:fks/Screens/profile.dart';
 import 'package:fks/Screens/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+late final User __user;
+List<String> __name = [];
+var score = new Map();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required User user}): _user = user, super(key: key);
@@ -15,9 +18,9 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 class _HomeScreenState extends State<HomeScreen> {
-  late User _user;
-  final List<String> myname = <String>['Kamrus', 'Samad', 'Limon', 'Sabiha', 'Sultana', 'Tonni'];
+  String? _result;
 
+  TextEditingController searchController = TextEditingController();
 
   @override
   void click() {
@@ -27,9 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _user = widget._user;
-
+    __user = widget._user;
     super.initState();
+    dataload();
+  }
+  dataload() async {
+    var collection = FirebaseFirestore.instance.collection('Faculty');
+    var querySnapshot = await collection.get();
+    for (var queryDocumentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      String name = data['name'] + " (" + data['initial'] + ")";
+      __name.add(name);
+      score[name] = data['score'];
+    }
   }
 
   @override
@@ -46,14 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
               PopupMenuItem(
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(user: _user,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(user: __user,)));
                   },
                   child: ListTile(
                     leading: Image.network(
-                      _user.photoURL!,
+                      __user.photoURL!,
                       fit: BoxFit.fitHeight,
                     ),
-                    title: Text(_user.displayName!),
+                    title: Text(__user.displayName!),
                   ),
                 ),
               ),
@@ -61,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
               PopupMenuItem(
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: __user)));
                   },
                   child: ListTile(
                     leading: Icon(Icons.home),
@@ -108,12 +121,17 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-        Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 20 / 4, // 5 top and bottom
-        ),
+            GestureDetector(
+              onTap: () async {
+                var result = await showSearch<String>(
+                  context: context,
+                  delegate: CustomDelegate(),
+                );
+                setState(() => _result = result);
+              },
+        child: Container(
+          margin: EdgeInsets.all(20),
+
         decoration: BoxDecoration(
           color: Colors.indigoAccent[100],
           borderRadius: BorderRadius.circular(12),
@@ -123,18 +141,20 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.black26, // Black color with 12% opacity
           )],
         ),
-        child: TextField(
-          // onChanged: onChanged,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            icon: Icon(Icons.search),
-            hintText: 'Search',
-            hintStyle: TextStyle(color: Colors.black),
+        child: ListTile(
+          leading: Icon(Icons.search),
+          title: Text(
+          "Search your Faculty",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
           ),
         ),
+        ),
       ),
+    ),
       Expanded(
         child: Stack(
           children: <Widget>[
@@ -167,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: GestureDetector(
                           onTap: ()=> {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => RateScreen(user: _user, name: document["name"],)))
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => RateScreen(user: __user, name: document["name"],)))
                           },
                         child: Container(
                           height: 136,
@@ -228,6 +248,105 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+
+class CustomDelegate extends SearchDelegate<String>{
+  List<String> _name = __name;
+
+
+  @override
+  List<Widget> buildActions(BuildContext context) => [IconButton(icon: Icon(Icons.clear), onPressed: () => query = '')];
+
+  @override
+  Widget buildLeading(BuildContext context) => IconButton(icon: Icon(Icons.chevron_left), onPressed: () => close(context, ''));
+
+  @override
+  Widget buildResults(BuildContext context) => Container();
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    var name;
+    if (query.isNotEmpty)
+      name = _name.where((e) => e.toLowerCase().contains(query.toLowerCase())).toList();
+    else
+      name = _name;
+
+    return ListView.builder(
+      itemCount: name.length,
+      itemBuilder: (_, i) {
+        return Container(
+          height: 136,
+          margin: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.indigoAccent[100],
+            boxShadow: [BoxShadow(
+              offset: Offset(0, 15),
+              blurRadius: 27,
+              color: Colors
+                  .black26, // Black color with 12% opacity
+            )
+            ],
+          ),
+          child: GestureDetector(
+            onTap: () =>
+            {
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) =>
+                      RateScreen(
+                        user: __user, name: name[i],)))
+            },
+            child: Container(
+              height: 136,
+              margin: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+
+              child: new Column(
+                children: [
+                  new ListTile(
+                    leading: Image.asset("assets/images/mam.png"),
+                    title: Text(
+                      "${name[i]}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    height: 30,
+                    width: 50,
+                    margin: const EdgeInsets.only(
+                        left: 240, top: 40, right: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
+                      color: Colors.cyan[300],
+                    ),
+                    child: Text(
+                      "${score[name[i]]}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
