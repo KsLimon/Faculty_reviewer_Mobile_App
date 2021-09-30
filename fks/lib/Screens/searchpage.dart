@@ -113,7 +113,7 @@ class CustomDelegate extends SearchDelegate<String>{
               Navigator.push(context, MaterialPageRoute(
                   builder: (context) =>
                       RateScreen(
-                        user: _user, name: name[i],)))
+                        user: _user, initial: name[i], name: name[i], department: name[i], link: name[i], score: name[i],)))
             },
             child: Container(
               height: 136,

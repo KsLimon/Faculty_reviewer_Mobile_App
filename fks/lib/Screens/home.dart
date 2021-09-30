@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fks/components/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fks/Screens/login/login.dart';
@@ -10,6 +11,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 late final User __user;
 List<String> __name = [];
 var score = new Map();
+var facini = new Map();
+var fname = new Map();
+var fdep = new Map();
+var flink = new Map();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required User user}): _user = user, super(key: key);
@@ -30,10 +35,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    __user = widget._user;
+    // __user = widget._user;
+    checklogin();
     super.initState();
     dataload();
   }
+
+  void checklogin() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      __user=user;
+    }
+    else {
+      __user=user!;
+    }
+  }
+
+
   dataload() async {
     var collection = FirebaseFirestore.instance.collection('Faculty');
     var querySnapshot = await collection.get();
@@ -42,6 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
       String name = data['name'] + " (" + data['initial'] + ")";
       __name.add(name);
       score[name] = data['score'];
+      facini[name] = data['initial'];
+      fname[name] = data['name'];
+      fdep[name] = data['department'];
+      flink[name] = data['link'];
     }
   }
 
@@ -187,7 +213,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: GestureDetector(
                           onTap: ()=> {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => RateScreen(user: __user, name: document["name"],)))
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                RateScreen(
+                                  user: __user,
+                                  initial: document["initial"],
+                                  name: document["name"],
+                                  department: document["department"],
+                                  link: document["link"],
+                                  score: document["score"],
+                                )))
                           },
                         child: Container(
                           height: 136,
@@ -268,7 +302,8 @@ class CustomDelegate extends SearchDelegate<String>{
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var name;
+    List<String> name = [];
+
     if (query.isNotEmpty)
       name = _name.where((e) => e.toLowerCase().contains(query.toLowerCase())).toList();
     else
@@ -294,10 +329,18 @@ class CustomDelegate extends SearchDelegate<String>{
           child: GestureDetector(
             onTap: () =>
             {
+              __name=[],
+              // __name = name,
               Navigator.push(context, MaterialPageRoute(
                   builder: (context) =>
                       RateScreen(
-                        user: __user, name: name[i],)))
+                        user: __user,
+                        initial: facini[name[i]],
+                        name: fname[name[i]],
+                        department: fdep[name[i]],
+                        link: flink[name[i]],
+                        score: score[name[i]],
+                      )))
             },
             child: Container(
               height: 136,
