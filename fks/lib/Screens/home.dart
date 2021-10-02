@@ -15,6 +15,9 @@ var facini = new Map();
 var fname = new Map();
 var fdep = new Map();
 var flink = new Map();
+var tscore = new Map();
+var fscore = new Map();
+var gscore = new Map();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required User user}): _user = user, super(key: key);
@@ -68,6 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
       fname[name] = data['name'];
       fdep[name] = data['department'];
       flink[name] = data['link'];
+      tscore[name] = data['tscore'];
+      fscore[name] = data['fscore'];
+      gscore[name] = data['gscore'];
     }
   }
 
@@ -221,6 +227,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   department: document["department"],
                                   link: document["link"],
                                   score: document["score"],
+                                  tscore: document['tscore'],
+                                  fscore: document["fscore"],
+                                  gscore: document["gscore"],
                                 )))
                           },
                         child: Container(
@@ -340,6 +349,9 @@ class CustomDelegate extends SearchDelegate<String>{
                         department: fdep[name[i]],
                         link: flink[name[i]],
                         score: score[name[i]],
+                        tscore: tscore[name[i]],
+                        fscore: fscore[name[i]],
+                        gscore: gscore[name[i]],
                       )))
             },
             child: Container(

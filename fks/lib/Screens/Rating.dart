@@ -9,8 +9,6 @@ import 'package:fks/components/appback.dart';
 import 'package:fks/Screens/profile.dart';
 import 'package:fks/Screens/commentpage.dart';
 
-var comment = new Map();
-
 class RateScreen extends StatefulWidget {
   const RateScreen({Key? key,
     required User user,
@@ -19,6 +17,9 @@ class RateScreen extends StatefulWidget {
     required String department,
     required String link,
     required String score,
+    required String tscore,
+    required String fscore,
+    required String gscore,
   }):
         _user = user,
         _initial=initial,
@@ -26,6 +27,9 @@ class RateScreen extends StatefulWidget {
         _name=name,
         _link=link,
         _score=score,
+        _tscore=tscore,
+        _fscore=fscore,
+        _gscore=gscore,
 
         super(key: key);
   final User _user;
@@ -34,13 +38,16 @@ class RateScreen extends StatefulWidget {
   final String _department;
   final String _link;
   final String _score;
+  final String _tscore;
+  final String _fscore;
+  final String _gscore;
 
   @override
   _RateScreenState createState() => _RateScreenState();
 }
 class _RateScreenState extends State<RateScreen> {
   late User _user;
-  late String initial, name, department, link, score;
+  late String initial, name, department, link, score, tscore, fscore, gscore;
   String cmnt='';
 
   getcmnt(String cmnt){
@@ -49,13 +56,15 @@ class _RateScreenState extends State<RateScreen> {
 
   @override
   void initState() {
-    dataload();
     _user = widget._user;
     initial = widget._initial;
     name=widget._name;
     department=widget._department;
     link=widget._link;
     score=widget._score;
+    tscore=widget._tscore;
+    fscore=widget._fscore;
+    gscore=widget._gscore;
     super.initState();
   }
 
@@ -63,37 +72,6 @@ class _RateScreenState extends State<RateScreen> {
   void click() {
     signOutGoogle();
     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-  }
-
-  dataload() async {
-    var collection = FirebaseFirestore.instance.collection('Comments');
-    var querySnapshot = await collection.get();
-    for (var queryDocumentSnapshot in querySnapshot.docs) {
-      Map<String, dynamic> data = queryDocumentSnapshot.data();
-      comment[data['faculty']] = data['comment'];
-    }
-  }
-
-  createcmnt(){
-    DocumentReference documentReference = FirebaseFirestore.instance.collection("Comments").doc();
-    Map<String, dynamic> cm = {
-      "comment": cmnt,
-      "cmentor": _user.displayName,
-      "faculty": initial,
-    };
-    documentReference.set(cm).whenComplete((){
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>
-          RateScreen(
-            user: _user,
-            initial: initial,
-            name: name,
-            department: department,
-            link: link,
-            score: score,
-          ),
-      ));
-    });
-
   }
 
   @override
@@ -227,15 +205,15 @@ class _RateScreenState extends State<RateScreen> {
                   ]),
                   DataRow(cells: [
                     DataCell(Text('Teaching',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                    DataCell(Text('0',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                    DataCell(Text('${tscore}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
                   ]),
                   DataRow(cells: [
-                    DataCell(Text('Garding',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                    DataCell(Text('0',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                    DataCell(Text('Greading',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                    DataCell(Text('${gscore}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
                   ]),
                   DataRow(cells: [
                     DataCell(Text('Friendly',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-                    DataCell(Text('0',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                    DataCell(Text('${fscore}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
                   ]),
                 ],
               ),

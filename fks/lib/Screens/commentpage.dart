@@ -17,8 +17,11 @@ class CmntScreen extends StatefulWidget {
 }
 class _CmntScreenState extends State<CmntScreen> {
   late String initial;
+  final fieldText = TextEditingController();
 
-  TextEditingController textEditingControllero = TextEditingController();
+  void clearText() {
+    fieldText.clear();
+  }
 
   @override
   void click() {
@@ -31,15 +34,18 @@ class _CmntScreenState extends State<CmntScreen> {
     initial = widget._initial;
     super.initState();
   }
+  Foo(){
+    print("I'm done");
+  }
 
   createcmnt(){
     DocumentReference documentReference = FirebaseFirestore.instance.collection("Comments").doc();
-    String s;
-    if (textEditingControllero.text==''){
+    String s='';
+    if (fieldText.text==''){
       Alert(message: 'Add Comment First').show();
       return ;
     }
-    else{s=textEditingControllero.text;}
+    else{s=fieldText.text;}
     Map<String, dynamic> cm = {
       "comment": s,
       "cmentor": "Ks Limon",
@@ -52,7 +58,6 @@ class _CmntScreenState extends State<CmntScreen> {
           ),
       ));
     });
-
   }
 
   @override
@@ -83,7 +88,7 @@ class _CmntScreenState extends State<CmntScreen> {
               ),
               child: ListTile(
                 title: TextField(
-                  controller: textEditingControllero,
+                  controller: fieldText,
                   decoration: InputDecoration(
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -92,9 +97,25 @@ class _CmntScreenState extends State<CmntScreen> {
                   ),
                 ),
                 trailing: GestureDetector(
-                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                      createcmnt(),
-                  ));},
+                  onTap: (){
+                    setState(() {
+                      DocumentReference documentReference = FirebaseFirestore.instance.collection("Comments").doc();
+                      String s='';
+                      if (fieldText.text==''){
+                        Alert(message: 'Add Comment First').show();
+                        return ;
+                      }
+                      else{s=fieldText.text;}
+                      Map<String, dynamic> cm = {
+                        "comment": s,
+                        "cmentor": "Ks Limon",
+                        "faculty": initial,
+                      };
+                      documentReference.set(cm).whenComplete((){
+                        clearText();
+                      });
+                    });
+                  },
                     child: const Icon(Icons.send)),
               ),
             ),
