@@ -115,7 +115,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: "Department"
                 ),
-                obscureText: true,
                 onChanged: (String pass){
                   getpass(pass);
                 },

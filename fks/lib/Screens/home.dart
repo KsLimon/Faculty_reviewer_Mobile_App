@@ -7,6 +7,8 @@ import 'package:fks/components/appback.dart';
 import 'package:fks/Screens/profile.dart';
 import 'package:fks/Screens/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fks/Screens/addfaculty.dart';
+
 
 late final User __user;
 List<String> __name = [];
@@ -114,10 +116,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(Icons.anchor),
-                  title: Text('Item 2'),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddFaculty(user: __user)));
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.add_box),
+                    title: Text("Add Faculty"),
+                  ),
                 ),
               ),
               const PopupMenuItem(
