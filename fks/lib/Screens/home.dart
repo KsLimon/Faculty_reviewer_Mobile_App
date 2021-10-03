@@ -9,7 +9,6 @@ import 'package:fks/Screens/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fks/Screens/addfaculty.dart';
 
-
 late final User __user;
 List<String> __name = [];
 var score = new Map();

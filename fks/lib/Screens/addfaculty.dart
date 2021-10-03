@@ -5,6 +5,8 @@ import 'package:fks/components/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fks/components/appback.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fks/Screens/evaluate.dart';
+
 
 import 'login/login.dart';
 
@@ -58,7 +60,7 @@ class _AddFacultyState extends State<AddFaculty> {
     };
 
     documentReference.set(faculty).whenComplete((){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => EvalScreen(user: _user, initial: ini,)));
     });
 
   }
@@ -69,7 +71,7 @@ class _AddFacultyState extends State<AddFaculty> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text(''),
         actions: [
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
@@ -144,6 +146,11 @@ class _AddFacultyState extends State<AddFaculty> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Expanded(
+                child: Stack(
+                    children: <Widget>[
+                      ListView(children: <Widget>[
+                        SizedBox(height: size.height * 0.03),
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 40),
@@ -158,7 +165,7 @@ class _AddFacultyState extends State<AddFaculty> {
               ),
             ),
 
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.03),
 
             Container(
               alignment: Alignment.center,
@@ -174,7 +181,7 @@ class _AddFacultyState extends State<AddFaculty> {
               ),
             ),
 
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.03),
 
             Container(
               alignment: Alignment.center,
@@ -189,7 +196,7 @@ class _AddFacultyState extends State<AddFaculty> {
               ),
             ),
 
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.03),
 
             Container(
               alignment: Alignment.center,
@@ -219,7 +226,7 @@ class _AddFacultyState extends State<AddFaculty> {
               ),
             ),
 
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.03),
 
             Container(
               alignment: Alignment.centerRight,
@@ -258,6 +265,7 @@ class _AddFacultyState extends State<AddFaculty> {
                 ),
               ),
             ),
+                      ])])),
           ],
         ),
       ),

@@ -8,6 +8,10 @@ import 'package:fks/Screens/home.dart';
 import 'package:fks/components/appback.dart';
 import 'package:fks/Screens/profile.dart';
 import 'package:fks/Screens/commentpage.dart';
+import 'package:fks/Screens/evaluate.dart';
+
+
+import 'addfaculty.dart';
 
 class RateScreen extends StatefulWidget {
   const RateScreen({Key? key,
@@ -80,7 +84,7 @@ class _RateScreenState extends State<RateScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Faculty's Score"),
+        title: Text('Rating'),
         actions: [
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
@@ -103,7 +107,7 @@ class _RateScreenState extends State<RateScreen> {
               PopupMenuItem(
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user)));
                   },
                   child: ListTile(
                     leading: Icon(Icons.home),
@@ -111,10 +115,15 @@ class _RateScreenState extends State<RateScreen> {
                   ),
                 ),
               ),
-              const PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(Icons.anchor),
-                  title: Text('Item 2'),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddFaculty(user: _user)));
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.add_box),
+                    title: Text("Add Faculty"),
+                  ),
                 ),
               ),
               const PopupMenuItem(
@@ -217,7 +226,33 @@ class _RateScreenState extends State<RateScreen> {
                   ]),
                 ],
               ),
-              SizedBox(height: size.height * 0.05),
+              SizedBox(height: size.height * 0.01),
+              GestureDetector(
+                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => EvalScreen(user: _user,initial: initial,)));},
+                child: Container(
+                  margin: EdgeInsets.all(20),
+
+                  decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [BoxShadow(
+                      offset: Offset(0, 15),
+                      blurRadius: 27,
+                      color: Colors.black26, // Black color with 12% opacity
+                    )],
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      "Evaluate this faculty",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Raleway',
+                      ),
+                    ),
+                  ),
+                ),),
               GestureDetector(
                 onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CmntScreen(initial: initial,)));},
               child: Container(

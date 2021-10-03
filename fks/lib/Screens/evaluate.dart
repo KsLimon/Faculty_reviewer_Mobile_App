@@ -6,19 +6,23 @@ import 'package:fks/Screens/home.dart';
 import 'package:fks/components/appback.dart';
 import 'package:fks/Screens/profile.dart';
 
+import 'addfaculty.dart';
+
 class EvalScreen extends StatefulWidget {
-  const EvalScreen({Key? key, required User user}): _user = user, super(key: key);
+  const EvalScreen({Key? key, required User user,required String initial,}): _user = user,_initial=initial, super(key: key);
   final User _user;
+  final String _initial;
   @override
   _EvalScreenState createState() => _EvalScreenState();
 }
 class _EvalScreenState extends State<EvalScreen> {
   late User _user;
+  late String initial;
 
   @override
   void initState() {
     _user = widget._user;
-
+    initial = widget._initial;
     super.initState();
   }
 
@@ -57,7 +61,7 @@ class _EvalScreenState extends State<EvalScreen> {
               PopupMenuItem(
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(user: _user)));
                   },
                   child: ListTile(
                     leading: Icon(Icons.home),
@@ -65,10 +69,15 @@ class _EvalScreenState extends State<EvalScreen> {
                   ),
                 ),
               ),
-              const PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(Icons.anchor),
-                  title: Text('Item 2'),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddFaculty(user: _user)));
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.add_box),
+                    title: Text("Add Faculty"),
+                  ),
                 ),
               ),
               const PopupMenuItem(
