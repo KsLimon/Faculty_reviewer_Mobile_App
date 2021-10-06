@@ -1,6 +1,7 @@
 import 'package:alert/alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fks/Screens/home.dart';
+import 'package:fks/Screens/notify.dart';
 import 'package:fks/Screens/profile.dart';
 import 'package:fks/components/auth.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,7 @@ class _AddFacultyState extends State<AddFaculty> {
     };
 
     documentReference.set(faculty).whenComplete((){
+      ntf();
       Navigator.push(context, MaterialPageRoute(builder: (context) => EvalScreen(user: _user, initial: ini,)));
     });
 
@@ -74,6 +76,16 @@ class _AddFacultyState extends State<AddFaculty> {
       Map<String, dynamic> data = queryDocumentSnapshot.data();
       allini.add(data['initial']);
     }
+  }
+
+  ntf(){
+    DocumentReference documentReference = FirebaseFirestore.instance.collection("Notification").doc(ini);
+    Map<String, dynamic> faculty = {
+      "user": _user.displayName,
+      "initial": ini,
+    };
+    documentReference.set(faculty).whenComplete((){});
+
   }
 
   @override
@@ -124,10 +136,22 @@ class _AddFacultyState extends State<AddFaculty> {
                   ),
                 ),
               ),
-              const PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(Icons.article),
-                  title: Text('Item 3'),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      if (_user.email=="kamrus.samad@northsouth.edu"){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => NScreen(user: _user)));
+                      }
+                      else{
+                        Alert(message: 'This section is only for admin').show();
+                      }
+                    });
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.notification_important_sharp),
+                    title: Text("Notification"),
+                  ),
                 ),
               ),
               const PopupMenuDivider(),

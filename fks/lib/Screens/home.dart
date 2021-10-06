@@ -128,12 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(Icons.article),
-                  title: Text('Item 3'),
-                ),
-              ),
               const PopupMenuDivider(),
               PopupMenuItem(
                 child: GestureDetector(

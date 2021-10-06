@@ -3,11 +3,11 @@ import 'package:alert/alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fks/Screens/register/register.dart';
 import 'package:fks/components/background.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:fks/components/auth.dart';
+import 'package:fks/Screens/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Phoenix.rebirth(context)
       },
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => RegisterScreen(user: user,)))
+          MaterialPageRoute(builder: (context) => HomeScreen(user: user,)))
     });
   }
 
