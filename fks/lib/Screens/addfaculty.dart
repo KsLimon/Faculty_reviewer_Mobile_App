@@ -255,7 +255,7 @@ class _AddFacultyState extends State<AddFaculty> {
                       createaccount()
                     },
                     child: Text(
-                      "SIGN UP",
+                      "Submit",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
