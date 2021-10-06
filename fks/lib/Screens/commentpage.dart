@@ -10,12 +10,14 @@ import 'package:fks/Screens/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CmntScreen extends StatefulWidget {
-  const CmntScreen({Key? key, required String initial,}):_initial=initial, super(key: key);
+  const CmntScreen({Key? key,required User user, required String initial,}):_user = user, _initial=initial, super(key: key);
+  final User _user;
   final String _initial;
   @override
   _CmntScreenState createState() => _CmntScreenState();
 }
 class _CmntScreenState extends State<CmntScreen> {
+  late User _user;
   late String initial;
   final fieldText = TextEditingController();
 
@@ -31,6 +33,7 @@ class _CmntScreenState extends State<CmntScreen> {
 
   @override
   void initState() {
+    _user = widget._user;
     initial = widget._initial;
     super.initState();
   }
@@ -48,12 +51,13 @@ class _CmntScreenState extends State<CmntScreen> {
     else{s=fieldText.text;}
     Map<String, dynamic> cm = {
       "comment": s,
-      "cmentor": "Ks Limon",
+      "cmentor": _user.displayName,
       "faculty": initial,
     };
     documentReference.set(cm).whenComplete((){
       Navigator.push(context, MaterialPageRoute(builder: (context) =>
           CmntScreen(
+            user: _user,
             initial: initial,
           ),
       ));
@@ -108,7 +112,7 @@ class _CmntScreenState extends State<CmntScreen> {
                       else{s=fieldText.text;}
                       Map<String, dynamic> cm = {
                         "comment": s,
-                        "cmentor": "Ks Limon",
+                        "cmentor": _user.displayName,
                         "faculty": initial,
                       };
                       documentReference.set(cm).whenComplete((){

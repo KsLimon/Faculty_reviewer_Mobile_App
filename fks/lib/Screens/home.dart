@@ -19,6 +19,7 @@ var flink = new Map();
 var tscore = new Map();
 var fscore = new Map();
 var gscore = new Map();
+var reviewed = new Map();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required User user}): _user = user, super(key: key);
@@ -75,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       tscore[name] = data['tscore'];
       fscore[name] = data['fscore'];
       gscore[name] = data['gscore'];
+      reviewed[name] = data['reviewed'];
     }
   }
 
@@ -236,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   tscore: document['tscore'],
                                   fscore: document["fscore"],
                                   gscore: document["gscore"],
+                                  reviewed: document["reviewed"],
                                 )))
                           },
                         child: Container(
@@ -358,6 +361,7 @@ class CustomDelegate extends SearchDelegate<String>{
                         tscore: tscore[name[i]],
                         fscore: fscore[name[i]],
                         gscore: gscore[name[i]],
+                        reviewed: reviewed[name[i]],
                       )))
             },
             child: Container(

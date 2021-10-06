@@ -59,6 +59,7 @@ class _EvalScreenState extends State<EvalScreen> {
     String tscore = data['tscore'];
     String fscore = data['fscore'];
     String gscore = data['gscore'];
+    int reviewed = data['reviewed'];
 
     double nos, nts, nfs, ngs;
     if (score == '0'){
@@ -79,16 +80,17 @@ class _EvalScreenState extends State<EvalScreen> {
 
       nos=((os+result)*10)/20;
     }
-
+    reviewed = reviewed+1;
     Map<String, dynamic> faculty = {
       "name": fname,
       "initial": facini,
       "department": fdep,
       "link": flink,
-      'score': nos.toString(),
-      'tscore': nts.toString(),
-      'fscore': nfs.toString(),
-      'gscore': ngs.toString(),
+      'score': nos.toStringAsFixed(2),
+      'tscore': nts.toStringAsFixed(2),
+      'fscore': nfs.toStringAsFixed(2),
+      'gscore': ngs.toStringAsFixed(2),
+      'reviewed': reviewed,
     };
 
     collection.set(faculty).whenComplete(() => {
@@ -99,10 +101,11 @@ class _EvalScreenState extends State<EvalScreen> {
             name: fname,
             department: fdep,
             link: flink,
-            score: nos.toString(),
-            tscore: nts.toString(),
-            fscore: nfs.toString(),
-            gscore: ngs.toString(),
+            score: nos.toStringAsFixed(2),
+            tscore: nts.toStringAsFixed(2),
+            fscore: nfs.toStringAsFixed(2),
+            gscore: ngs.toStringAsFixed(2),
+            reviewed: reviewed,
           )))
     },);
   }

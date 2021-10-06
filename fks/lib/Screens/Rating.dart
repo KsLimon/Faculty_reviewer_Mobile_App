@@ -24,6 +24,7 @@ class RateScreen extends StatefulWidget {
     required String tscore,
     required String fscore,
     required String gscore,
+    required int reviewed,
   }):
         _user = user,
         _initial=initial,
@@ -34,6 +35,7 @@ class RateScreen extends StatefulWidget {
         _tscore=tscore,
         _fscore=fscore,
         _gscore=gscore,
+        _reviewed=reviewed,
 
         super(key: key);
   final User _user;
@@ -45,6 +47,7 @@ class RateScreen extends StatefulWidget {
   final String _tscore;
   final String _fscore;
   final String _gscore;
+  final int _reviewed;
 
   @override
   _RateScreenState createState() => _RateScreenState();
@@ -52,6 +55,7 @@ class RateScreen extends StatefulWidget {
 class _RateScreenState extends State<RateScreen> {
   late User _user;
   late String initial, name, department, link, score, tscore, fscore, gscore;
+  late int reviewed;
   String cmnt='';
 
   getcmnt(String cmnt){
@@ -69,6 +73,7 @@ class _RateScreenState extends State<RateScreen> {
     tscore=widget._tscore;
     fscore=widget._fscore;
     gscore=widget._gscore;
+    reviewed=widget._reviewed;
     super.initState();
   }
 
@@ -196,6 +201,17 @@ class _RateScreenState extends State<RateScreen> {
                         fontSize: 26,
                         fontWeight: FontWeight.bold),
                   )),
+              Center(
+                  child: Text(
+                    '${reviewed} reviews',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      color: Colors.indigo,
+                    ),
+                  )
+              ),
               DataTable(
                 columns: [
                   DataColumn(label: Text(
@@ -254,7 +270,7 @@ class _RateScreenState extends State<RateScreen> {
                   ),
                 ),),
               GestureDetector(
-                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CmntScreen(initial: initial,)));},
+                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CmntScreen(user: _user,initial: initial,)));},
               child: Container(
                 margin: EdgeInsets.all(20),
 

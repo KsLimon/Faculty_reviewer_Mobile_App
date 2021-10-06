@@ -1,3 +1,4 @@
+import 'package:alert/alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fks/Screens/home.dart';
 import 'package:fks/Screens/profile.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:fks/components/appback.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fks/Screens/evaluate.dart';
-
 
 import 'login/login.dart';
 
@@ -19,6 +19,7 @@ class AddFaculty extends StatefulWidget {
 class _AddFacultyState extends State<AddFaculty> {
   late User _user;
   late String name, ini, mail, dep, link='';
+  List <String> allini=[];
 
   @override
   void click() {
@@ -29,6 +30,7 @@ class _AddFacultyState extends State<AddFaculty> {
   @override
   void initState() {
     _user = widget._user;
+    dataload();
 
     super.initState();
   }
@@ -63,6 +65,15 @@ class _AddFacultyState extends State<AddFaculty> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => EvalScreen(user: _user, initial: ini,)));
     });
 
+  }
+
+  dataload() async {
+    var collection = FirebaseFirestore.instance.collection('Faculty');
+    var querySnapshot = await collection.get();
+    for (var queryDocumentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      allini.add(data['initial']);
+    }
   }
 
   @override
@@ -252,7 +263,16 @@ class _AddFacultyState extends State<AddFaculty> {
                   padding: const EdgeInsets.all(0),
                   child: GestureDetector(
                     onTap: () => {
-                      createaccount()
+                      setState((){
+                        List <String> s=[];
+                        s = allini.where((e) => e.toLowerCase().contains(ini.toLowerCase())).toList() ;
+                        if (s.isEmpty) {
+                              createaccount();
+                            }
+                        else{
+                          Alert(message: 'This Faculty is already there').show();
+                        }
+                      }),
                     },
                     child: Text(
                       "Submit",
